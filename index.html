@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Domótico</title>
+  <style>
+    :root {
+      --bg-panel: rgba(15, 15, 15, 0.75);
+      --border-panel: rgba(255, 255, 255, 0.08);
+      --btn-bg1: #2B2F3B ;
+      --btn-bg2: #2B2F3B ;
+      --btn-border: rgba(255, 255, 255, 0.10);
+      --btn-text: #e6e6e6;
+      --btn-text-dim: #bfbfbf;
+  --btn-hover: #615f68;
+      --shadow-outer: 0 6px 24px rgba(0,0,0,0.45);
+      --shadow-inner: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    body { margin: 0; overflow: hidden; background: #111; }
+
+    /* Barra superior centrada */
+    #controls {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-panel);
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow-outer);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 10;
+    }
+
+    /* Contenedor flexible con salto de línea, centrado */
+    #controls .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      max-width: 860px;
+    }
+
+    /* Botón estilo panel oscuro */
+    .ui-button {
+      appearance: none;
+      background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+      color: var(--btn-text);
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      width: 96px;
+      height: 92px;
+      padding: 8px 8px 10px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: 12px;
+      letter-spacing: .4px;
+      text-transform: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-inner), 0 2px 10px rgba(0,0,0,.35);
+      transition: background .15s ease, transform .06s ease, box-shadow .2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .ui-button:hover { background: linear-gradient(180deg, var(--btn-hover), var(--btn-bg2)); }
+    .ui-button:active { transform: translateY(1px); box-shadow: var(--shadow-inner), 0 1px 6px rgba(0,0,0,.45); }
+    
+    /* Icono del botón */
+    .ui-button::before {
+      content: "";
+      display: block;
+      width: 34px;
+      height: 34px;
+  margin-bottom: 0;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    
+    /* Texto del botón con truncamiento */
+    .ui-button span {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.15;
+  min-height: unset;
+  font-weight: normal;
+    }
+    
+    /* Iconos específicos para cada botón */
+    #btnPortonDelantero::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z" /></svg>');
+    }
+    #btnPortonTrasero::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage-open</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z" /></svg>');
+    }
+    #btnPuerta::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door</title><path d="M8,3C6.89,3 6,3.89 6,5V21H18V5C18,3.89 17.11,3 16,3H8M8,5H16V19H8V5M13,11V13H15V11H13Z" /></svg>');
+    }
+    #btnPuertaCuarto::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door-open</title><path d="M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z" /></svg>');
+    }
+    #btnCortinaDelantera::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+    }
+    #btnCortinaTrasera::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
+    }
+    #btnCortinaExtraFixed::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
+    }
+    .icon-light::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd86b"><path d="M9 21h6v-1.5H9V21zm3-19C7.93 2 5 4.93 5 8c0 2.38 1.19 4.47 3 5.74V16c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.07-2.93-6-6-6z"/></svg>'); }
+
+    /* Contenedor con desplazamiento horizontal (sin barra visible) */
+    .controls-scroll {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 2.5px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      white-space: nowrap;
+      /* Ocultar scrollbar en Firefox */
+      scrollbar-width: none;
+      /* Evitar rebotes y mantener scroll en su contenedor */
+      overscroll-behavior: contain;
+  /* Mejor UX al arrastrar */
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px 8px 16px 16px;
+    }
+    
+    /* Asegurar que los botones no se envuelvan */
+    .controls-scroll .ui-button {
+      flex: 0 0 auto;
+    }
+    
+    /* Ocultar scrollbar en WebKit */
+    .controls-scroll::-webkit-scrollbar { display: none; }
+    .controls-scroll.dragging { cursor: grabbing; }
+
+    /* Hacer que los botones de luces se comporten como hijos directos del scroller */
+    #lights-controls { display: contents; }
+    
+    /* Agrupadores (luces/cortinas) para que parezcan módulos dentro de la barra */
+    .module { display: contents; }
+    
+    .module-title { display: none; }
+    
+    .module-buttons { display: contents; }
+    
+    /* Ocultar scrollbar en WebKit */
+    .module-buttons::-webkit-scrollbar { display: none; }
+    .module-buttons.dragging { cursor: grabbing; }
+    
+    /* Ajuste para la fila de controles */
+    .controls-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* HUD de coordenadas */
+    #hud-curtain-front {
+      position: fixed;
+      left: 14px;
+      bottom: 14px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      color: #e8e8e8;
+      font: 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      letter-spacing: .2px;
+      padding: 6px 10px;
+      z-index: 20;
+      pointer-events: none;
+      user-select: text;
+      min-width: 210px;
+    }
+
+    .slider-col {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--btn-text-dim);
+      font: 11px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    .slider-col input[type="range"] {
+      width: 120px;
+    }
+
+    /* Estilo para el rectángulo de chat */
+    #chat-box {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border-panel);
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      box-shadow: var(--shadow-outer);
+      z-index: 20;
+    }
+
+    #chat-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--border-panel);
+      border-radius: 8px;
+      background: #222;
+      color: var(--btn-text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    #chat-send {
+      margin-left: 10px;
+      padding: 10px 20px;
+      background: var(--btn-bg1);
+      color: var(--btn-text);
+      border: 1px solid var(--btn-border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #chat-send:hover {
+      background: var(--btn-hover);
+    }
+
+    /* Estilo para el área de respuesta */
+    #chat-response {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #e6e6e6;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      z-index: 20;
+    }
+
+    /* Estilos para los íconos dinámicos del portón delantero */
+    #btnPortonDelantero.garage-open::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage-open</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z" /></svg>');
+    }
+    #btnPortonDelantero.garage-closed::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z" /></svg>');
+    }
+
+    /* Estilos para los íconos dinámicos de las puertas */
+    #btnPuertaCuarto.door-open::before, #btnPuertaBaño.door-open::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door-open</title><path d="M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z" /></svg>');
+    }
+    #btnPuertaCuarto.door-closed::before, #btnPuertaBaño.door-closed::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door</title><path d="M8,3C6.89,3 6,3.89 6,5V21H18V5C18,3.89 17.11,3 16,3H8M8,5H16V19H8V5M13,11V13H15V11H13Z" /></svg>');
+    }
+  </style>
+</head>
+<body>
+  
+
+  <div id="controls">
+    <div class="controls-scroll">
+  <img id="arrow-left" src="assets/flecha.png" style="position:absolute;left:-22px;top:50%;transform:translateY(-50%) rotate(180deg);width:20px;height:20px;z-index:20;cursor:pointer;display:none;filter:drop-shadow(0 2px 6px #000);" />
+  <button id="btnPortonDelantero" class="ui-button"><span>Portón delantero</span></button>
+  <button id="btnPortonTrasero" class="ui-button"><span>Portón trasero</span></button>
+  <button id="btnPuerta" class="ui-button"><span>Puerta</span></button>
+  <button id="btnPuertaCuarto" class="ui-button"><span>Puerta cuarto</span></button>
+  <button id="btnPuertaBaño" class="ui-button"><span>Puerta baño</span></button>
+  <button id="btnCortinaDelantera" class="ui-button"><span>Cortina delantera</span></button>
+  <button id="btnCortinaTrasera" class="ui-button"><span>Cortina trasera</span></button>
+  <button id="btnCortinaExtra" class="ui-button" style="display: none;"><span>Cortina cocina</span></button>
+  <button id="btnCortinaExtraFixed" class="ui-button"><span>Cortina cocina</span></button>
+      <div id="lights-controls"></div>
+  <img id="arrow-right" src="assets/flecha.png" style="position:absolute;right:-22px;top:50%;transform:translateY(-50%);width:20px;height:20px;z-index:20;cursor:pointer;display:none;filter:drop-shadow(0 2px 6px #000);" />
+  <script>
+    // Flechas de navegación para controles-scroll
+    const scrollContainer = document.querySelector('.controls-scroll');
+    const arrowLeft = document.getElementById('arrow-left');
+    const arrowRight = document.getElementById('arrow-right');
+    function updateArrows() {
+      if (!scrollContainer) return;
+      const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      arrowLeft.style.display = scrollContainer.scrollLeft > 10 ? 'block' : 'none';
+      arrowRight.style.display = scrollContainer.scrollLeft < maxScroll - 10 ? 'block' : 'none';
+    }
+    scrollContainer.addEventListener('scroll', updateArrows);
+    window.addEventListener('resize', updateArrows);
+    setTimeout(updateArrows, 500);
+    arrowLeft.addEventListener('click', () => {
+      scrollContainer.scrollBy({ left: -150, behavior: 'smooth' });
+    });
+    arrowRight.addEventListener('click', () => {
+      scrollContainer.scrollBy({ left: 150, behavior: 'smooth' });
+    });
+  </script>
+    </div>
+    </div>
+  </div>
+
+
+
+  <!-- ✅ Usamos módulos ES -->
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+    "three/examples/jsm/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+  }
+}
+  </script>
+  <script type="module" src="config.js"></script>
+  <script type="module" src="main.js"></script>
+  <script>
+  (function(){
+    function enableDragScroll(container){
+      if(!container) return;
+      let isDown=false; let startX=0; let startScroll=0; let activeId=null; let allowDrag=true; let draggingActive=false;
+      const THRESHOLD = 4; // px para considerar que es drag
+      const onDown=(e)=>{
+        isDown=true; draggingActive=false; startX=e.clientX; startScroll=container.scrollLeft; activeId=e.pointerId;
+      };
+      const onMove=(e)=>{
+        if(!isDown) return;
+        const dx=e.clientX-startX;
+        if (!draggingActive && Math.abs(dx) < THRESHOLD) return; // aún es click
+        // activar drag al superar umbral
+        draggingActive=true; container.classList.add('dragging');
+        e.preventDefault();
+        container.scrollLeft = startScroll - dx;
+      };
+      const onUp=()=>{
+        if(!isDown) return; isDown=false;
+        activeId=null; container.classList.remove('dragging'); draggingActive=false;
+      };
+      container.addEventListener('pointerdown', onDown, {passive:false});
+      container.addEventListener('pointermove', onMove, {passive:false});
+      container.addEventListener('pointerup', onUp, {passive:true});
+      container.addEventListener('pointerleave', onUp, {passive:true});
+      // wheel horizontal support
+      container.addEventListener('wheel', (e)=>{
+        if(Math.abs(e.deltaX) < Math.abs(e.deltaY)) return; // vertical wheel ignored
+        container.scrollLeft += e.deltaX; e.preventDefault();
+      }, {passive:false});
+    }
+    // Inicializar al cargar
+    const topScroll = document.querySelector('.controls-scroll');
+    enableDragScroll(topScroll);
+    document.querySelectorAll('.module-buttons').forEach(enableDragScroll);
+    // Poner tooltips con el texto completo
+    document.querySelectorAll('.ui-button').forEach(btn=>{
+      const label = btn.textContent?.trim();
+      if(label) btn.title = label;
+    });
+  })();
+  </script>
+</body>
+  <script>
+    function updateZoomIndicator() {
+      const zoom = Math.round(window.devicePixelRatio * 100);
+      document.getElementById('zoom-indicator').textContent = `Zoom: ${zoom}%`;
+    }
+    window.addEventListener('resize', updateZoomIndicator);
+    document.addEventListener('visibilitychange', updateZoomIndicator);
+    document.addEventListener('DOMContentLoaded', updateZoomIndicator);
+    setInterval(updateZoomIndicator, 300);
+    updateZoomIndicator();
+  </script>
+</html>
