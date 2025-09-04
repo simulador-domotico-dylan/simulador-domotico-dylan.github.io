@@ -199,22 +199,8 @@ function resolveCurtainDimensions(modelBox) {
 }
 
 // ===== UTILIDADES DE UI =====
-/**
- * Asegura que los botones mantengan su estructura <button><span>Label</span></button>
- * para que el estilo visual no se pierda al cambiar el texto.
- */
-function setButtonLabel(button, text) {
-  if (!button) return;
-  let span = button.querySelector('span');
-  if (!span) {
-    span = document.createElement('span');
-    // Vaciar el contenido y adherir el span
-    while (button.firstChild) button.removeChild(button.firstChild);
-    button.appendChild(span);
-  }
-  span.textContent = text;
-  button.title = text;
-}
+// Importamos setButtonLabel desde buttonLogic.js
+import { inicializarBotones, setButtonLabel } from './src/buttonLogic.js';
 
 /**
  * Crea un panel de cortina con pivot superior
@@ -708,14 +694,6 @@ function createCurtainExtraAt(worldTopCenter, width, maxHeight) {
   return sim;
 }
 
-function initCurtainExtraUI() {
-  const btn = document.getElementById('btnCortinaExtra');
-  if (btn) {
-    btn.className = 'ui-button';
-    btn.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
-  }
-}
-
 function spawnCurtainExtraNear(modelBox) {
   const center = modelBox.getCenter(new THREE.Vector3());
   const top = modelBox.max.y;
@@ -825,11 +803,7 @@ function initCurtainExtraUIForClone() {
         cortinaExtraCerrada = (cortinaExtraPanel.scale.y <= closeTargetInit + 1e-4);
     }
 
-	const updateBtn = () => {
-		if (cortinaExtraNode) btn.textContent = `${cortinaExtraNode.visible ? 'Ocultar' : 'Mostrar'} cortina ancha trasera`;
-		else btn.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
-	};
-	updateBtn();
+	
 
 	btn.addEventListener('click', () => {
 		if (cortinaExtraNode) {
@@ -1448,9 +1422,11 @@ loader.load('assets/modelo_final.glb', (gltf) => {
   // Configurar event listeners de puertas interiores DESPUÉS de cargar el modelo
   const btnPuertaCuarto = document.getElementById("btnPuertaCuarto");
   if (btnPuertaCuarto) {
+    const config = buttonConfig.puertaCuarto;
     if (puertaInterior1) {
-      setButtonLabel(btnPuertaCuarto, `puerta cuarto`);
-      btnPuertaCuarto.classList.add("door-open"); // Icono inicial
+      // Establecer el texto fijo una sola vez
+      setButtonLabel(btnPuertaCuarto, config.texto);
+      btnPuertaCuarto.classList.add(puertaInterior1Abierta ? config.icono2 : config.icono1); // Icono inicial
       btnPuertaCuarto.disabled = false;
       btnPuertaCuarto.style.opacity = "1";
       btnPuertaCuarto.addEventListener("click", () => {
@@ -1458,9 +1434,9 @@ loader.load('assets/modelo_final.glb', (gltf) => {
         const destino = puertaInterior1Abierta ? puertaInterior1.rotacionCerradaY : puertaInterior1.rotacionAbiertaY;
         rotarSuave(puertaInterior1, destino, () => {
           puertaInterior1Abierta = !puertaInterior1Abierta;
-          setButtonLabel(btnPuertaCuarto, `puerta cuarto`);
-          btnPuertaCuarto.classList.toggle("door-open", !puertaInterior1Abierta);
-          btnPuertaCuarto.classList.toggle("door-closed", puertaInterior1Abierta);
+          // Solo actualizar el icono
+          btnPuertaCuarto.classList.remove(config.icono1, config.icono2);
+          btnPuertaCuarto.classList.add(puertaInterior1Abierta ? config.icono2 : config.icono1);
         });
       });
       console.log("✔ Event listener configurado para puerta cuarto");
@@ -1473,9 +1449,11 @@ loader.load('assets/modelo_final.glb', (gltf) => {
 
   const btnPuertaBaño = document.getElementById("btnPuertaBaño");
   if (btnPuertaBaño) {
+    const config = buttonConfig.puertaBaño;
     if (puertaInterior2) {
-      setButtonLabel(btnPuertaBaño, `puerta baño`);
-      btnPuertaBaño.classList.add("door-open"); // Icono inicial
+      // Establecer el texto fijo una sola vez
+      setButtonLabel(btnPuertaBaño, config.texto);
+      btnPuertaBaño.classList.add(puertaInterior2Abierta ? config.icono2 : config.icono1); // Icono inicial
       btnPuertaBaño.disabled = false;
       btnPuertaBaño.style.opacity = "1";
       btnPuertaBaño.addEventListener("click", () => {
@@ -1483,9 +1461,9 @@ loader.load('assets/modelo_final.glb', (gltf) => {
         const destino = puertaInterior2Abierta ? puertaInterior2.rotacionCerradaY : puertaInterior2.rotacionAbiertaY;
         rotarSuave(puertaInterior2, destino, () => {
           puertaInterior2Abierta = !puertaInterior2Abierta;
-          setButtonLabel(btnPuertaBaño, `puerta baño`);
-          btnPuertaBaño.classList.toggle("door-open", !puertaInterior2Abierta);
-          btnPuertaBaño.classList.toggle("door-closed", puertaInterior2Abierta);
+          // Solo actualizar el icono
+          btnPuertaBaño.classList.remove(config.icono1, config.icono2);
+          btnPuertaBaño.classList.add(puertaInterior2Abierta ? config.icono2 : config.icono1);
         });
       });
     }
@@ -1498,16 +1476,26 @@ loader.load('assets/modelo_final.glb', (gltf) => {
 
 // Botón de puerta con toggle sincronizado (solo puerta principal)
 const btnPuerta = document.getElementById("btnPuerta");
-btnPuerta.addEventListener("click", () => {
-  if (!puertaControl || animacionActiva) return;
+if (btnPuerta) {
+  const config = buttonConfig.puertaPrincipal;
+  // Establecer el texto fijo una sola vez
+  setButtonLabel(btnPuerta, config.texto);
+  // Actualizar el icono según el estado inicial
+  btnPuerta.classList.add(puertaControlAbierta ? config.icono2 : config.icono1);
+  
+  btnPuerta.addEventListener("click", () => {
+    if (!puertaControl || animacionActiva) return;
 
-  const destino = puertaControlAbierta ? puertaControl.rotacionCerradaY : puertaControl.rotacionAbiertaY;
+    let destino = puertaControlAbierta ? puertaControl.rotacionCerradaY : puertaControl.rotacionAbiertaY;
 
-  rotarSuave(puertaControl, destino, () => {
-    puertaControlAbierta = !puertaControlAbierta;
-    setButtonLabel(btnPuerta, `${puertaControlAbierta ? "Cerrar" : "Abrir"} ${puertaControl.name}`);
+    rotarSuave(puertaControl, destino, () => {
+      puertaControlAbierta = !puertaControlAbierta;
+      // Actualizar solo el icono
+      btnPuerta.classList.remove(config.icono1, config.icono2);
+      btnPuerta.classList.add(puertaControlAbierta ? config.icono2 : config.icono1);
+    });
   });
-});
+}
 
 // Los event listeners de puertas interiores se configurarán después de cargar el modelo
 
@@ -1525,8 +1513,8 @@ if (btnPortonDelantero) {
     rotarGarageSuave(portonDelanteroPivot, destino, () => {
       portonDelanteroAbierto = !portonDelanteroAbierto;
       const isAbrir = !portonDelanteroAbierto;
-      setButtonLabel(btnPortonDelantero, isAbrir ? config.texto1 : config.texto2);
-      btnPortonDelantero.className = "ui-button"; // Resetear clases
+      // Mantener el texto fijo
+      btnPortonDelantero.classList.remove(config.icono1, config.icono2);
       btnPortonDelantero.classList.add(isAbrir ? config.icono1 : config.icono2);
     });
   });
@@ -1535,13 +1523,21 @@ if (btnPortonDelantero) {
 // Botón de portón trasero (usa pivot para rotar desde la parte de arriba)
 const btnPortonTrasero = document.getElementById("btnPortonTrasero");
 if (btnPortonTrasero) {
-  if (portonTrasero) setButtonLabel(btnPortonTrasero, `Abrir ${portonTrasero.name}`);
+  const config = buttonConfig.portonTrasero;
+  if (portonTrasero) {
+    // Establecer el texto fijo una sola vez
+    setButtonLabel(btnPortonTrasero, config.texto);
+    // Actualizar el icono según el estado inicial
+    btnPortonTrasero.classList.add(portonTraseroAbierto ? config.icono2 : config.icono1);
+  }
   btnPortonTrasero.addEventListener("click", () => {
     if (!portonTraseroPivot || animacionActiva) return;
     const destino = portonTraseroAbierto ? portonTraseroPivot.rotacionCerradaX : portonTraseroPivot.rotacionAbiertaX;
     rotarGarageSuave(portonTraseroPivot, destino, () => {
       portonTraseroAbierto = !portonTraseroAbierto;
-      setButtonLabel(btnPortonTrasero, `${portonTraseroAbierto ? "Cerrar" : "Abrir"} ${portonTrasero.name}`);
+      // Solo actualizar el icono
+      btnPortonTrasero.classList.remove(config.icono1, config.icono2);
+      btnPortonTrasero.classList.add(portonTraseroAbierto ? config.icono2 : config.icono1);
     });
   });
 }
@@ -1549,28 +1545,42 @@ if (btnPortonTrasero) {
 // Controles de cortinas (toggle cerrar/abrir)
 const btnCortinaDelantera = document.getElementById('btnCortinaDelantera');
 if (btnCortinaDelantera) {
-  const updateLabel = () => setButtonLabel(btnCortinaDelantera, `${cortinaDelanteraCerrada ? 'Abrir' : 'Cerrar'} cortina habitación 2`);
-  updateLabel();
+  const config = buttonConfig.cortinaDelantera;
+  // Establecer el texto fijo una sola vez
+  setButtonLabel(btnCortinaDelantera, config.texto);
+  // Actualizar solo el icono según el estado
+  const updateIcon = () => {
+    btnCortinaDelantera.classList.remove(config.icono1, config.icono2);
+    btnCortinaDelantera.classList.add(cortinaDelanteraCerrada ? config.icono1 : config.icono2);
+  };
+  updateIcon();
   btnCortinaDelantera.addEventListener('click', () => {
     if (!cortinaDelanteraPanel) { console.warn('Cortina habitación 2 (panel) no lista'); return; }
     const objetivo = cortinaDelanteraCerrada ? 0.001 : cortinaDelanteraPanelMaxScaleY;
     animatePanel(cortinaDelanteraPanel, objetivo, 350, () => {
       cortinaDelanteraCerrada = !cortinaDelanteraCerrada;
-      updateLabel();
+      updateIcon();
     });
   });
 }
 
 const btnCortinaTrasera = document.getElementById('btnCortinaTrasera');
 if (btnCortinaTrasera) {
-  const updateLabel = () => setButtonLabel(btnCortinaTrasera, `${cortinaTraseraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`);
-  updateLabel();
+  const config = buttonConfig.cortinaTrasera;
+  // Establecer el texto fijo una sola vez
+  setButtonLabel(btnCortinaTrasera, config.texto);
+  // Actualizar solo el icono según el estado
+  const updateIcon = () => {
+    btnCortinaTrasera.classList.remove(config.icono1, config.icono2);
+    btnCortinaTrasera.classList.add(cortinaTraseraCerrada ? config.icono1 : config.icono2);
+  };
+  updateIcon();
   btnCortinaTrasera.addEventListener('click', () => {
     if (!cortinaTraseraPanel) { console.warn('Cortina cocina (panel) no lista'); return; }
     const objetivo = cortinaTraseraCerrada ? 0.001 : cortinaTraseraPanelMaxScaleY;
     animatePanel(cortinaTraseraPanel, objetivo, 350, () => {
       cortinaTraseraCerrada = !cortinaTraseraCerrada;
-      updateLabel();
+      updateIcon();
       const p = cortinaTraseraPanelPivot.position;
       console.log('📌 Trasera pivot:', { x: p.x.toFixed(3), y: p.y.toFixed(3), z: p.z.toFixed(3) });
 });
@@ -1625,32 +1635,6 @@ if (btnDebugBajar) {
 
 // Nuevo botón para cortina extra (fijo)
 const btnFixed = document.getElementById('btnCortinaExtraFixed');
-if (btnFixed) {
-  btnFixed.addEventListener('click', () => {
-    if (!cortinaExtraPanel) return;
-    const objetivo = cortinaExtraCerrada ? cortinaExtraMaxScaleY : 0.001;
-    animatePanel(cortinaExtraPanel, objetivo, 350, () => {
-      cortinaExtraCerrada = !cortinaExtraCerrada;
-      btnFixed.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
-    });
-  });
-}
-
-// Función para inicializar íconos después de cargar el DOM
-function inicializarIconos() {
-  const botones = document.querySelectorAll('.ui-button');
-  botones.forEach(btn => {
-    const texto = btn.textContent?.trim();
-    if (texto.includes('Abrir')) {
-      btn.classList.add(btn.id === 'btnPortonDelantero' ? 'garage-open' : 'door-open');
-    } else if (texto.includes('Cerrar')) {
-      btn.classList.add(btn.id === 'btnPortonDelantero' ? 'garage-closed' : 'door-closed');
-    }
-  });
-}
-
-// Llamar a la función después de cargar el DOM
-window.addEventListener('DOMContentLoaded', inicializarIconos);
 
 
 // Indicador visual de zoom de cámara 3D
@@ -1700,6 +1684,6 @@ function animate() {
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
-  updateZoomIndicator3D();
+  // Eliminar la llamada a updateZoomIndicator3D que no está definida
 }
 animate();
