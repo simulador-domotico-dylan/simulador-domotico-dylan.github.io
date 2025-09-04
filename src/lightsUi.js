@@ -84,26 +84,24 @@ function setupLightButtons(root) {
   lucesObjetos.forEach((mesh, idx) => {
     const btn = document.createElement('button');
     btn.id = `btnLight_${idx}`;
-    btn.className = 'ui-button icon-light';
+    btn.className = 'ui-button';
+    btn.classList.add(mesh.userData.isOn ? 'light-on' : 'light-off');
     btn.title = `${mesh.name}`;
+    
+    // Crear el span para el texto fijo
     const label = document.createElement('span');
-  label.textContent = `${mesh.name}`;
+    label.textContent = `${mesh.name}`;
     btn.appendChild(label);
+    
     btn.addEventListener('click', () => {
       const newState = !mesh.userData.isOn;
       turnLight(mesh, newState);
-  label.textContent = `${mesh.name}`;
-
-      // Cambiar el color del ícono del foco según el estado
-      const icon = btn.querySelector('.icon-light');
-      if (icon) {
-        if (mesh.userData.isOn) {
-          icon.style.color = '#FFD700'; // Amarillo (estado encendido)
-        } else {
-          icon.style.color = '#FFFFFF'; // Blanco (estado apagado)
-        }
-      }
+      
+      // Solo cambiar la clase del botón para actualizar el icono
+      btn.classList.remove('light-on', 'light-off');
+      btn.classList.add(mesh.userData.isOn ? 'light-on' : 'light-off');
     });
+    
     buttonsContainer.appendChild(btn);
   });
 }
