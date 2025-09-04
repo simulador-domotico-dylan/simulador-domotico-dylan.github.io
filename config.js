@@ -30,51 +30,63 @@ export const curtainConfig = {
 
 export const buttonConfig = {
   portonDelantero: {
-    texto1: "Abrir portón delantero",
+    texto: "Portón 1",
     icono1: "garage-open",
-    texto2: "Cerrar portón delantero",
     icono2: "garage-closed",
   },
   portonTrasero: {
-    texto1: "Abrir portón trasero",
+    texto: "Portón 2",
     icono1: "garage-open",
-    texto2: "Cerrar portón trasero",
     icono2: "garage-closed",
   },
   puertaPrincipal: {
-    texto1: "Abrir puerta principal",
+    texto: "Puerta 1",
     icono1: "door-open",
-    texto2: "Cerrar puerta principal",
     icono2: "door-closed",
   },
   puertaCuarto: {
-    texto1: "Abrir puerta cuarto",
+    texto: "Puerta 2",
     icono1: "door-open",
-    texto2: "Cerrar puerta cuarto",
     icono2: "door-closed",
   },
   puertaBaño: {
-    texto1: "Abrir puerta baño",
+    texto: "Puerta 3",
     icono1: "door-open",
-    texto2: "Cerrar puerta baño",
     icono2: "door-closed",
   },
   cortinaDelantera: {
-    texto1: "Abrir cortina delantera",
+    texto: "Cortina 1",
     icono1: "curtains",
-    texto2: "Cerrar cortina delantera",
     icono2: "curtains-closed",
   },
   cortinaTrasera: {
-    texto1: "Abrir cortina trasera",
+    texto: "Cortina 2",
     icono1: "curtains",
-    texto2: "Cerrar cortina trasera",
     icono2: "curtains-closed",
   },
   cortinaExtra: {
-    texto1: "Abrir cortina cocina",
-    icono1: "curtains",
-    texto2: "Cerrar cortina cocina",
-    icono2: "curtains-closed",
+    texto: "Cortina 3",
+    icono1: "curtains-closed",
+    icono2: "curtains",
+  },
+  luzIzquierda: {
+    texto: "Luz Izquierda",
+    icono1: "light-on",
+    icono2: "light-off",
+  },
+  luzDerecha: {
+    texto: "Luz Derecha",
+    icono1: "light-on",
+    icono2: "light-off",
+  },
+  luzTrasera: {
+    texto: "Luz Trasera",
+    icono1: "light-on",
+    icono2: "light-off",
+  },
+  luzCocina: {
+    texto: "Luz Cocina",
+    icono1: "light-on",
+    icono2: "light-off",
   },
 };
