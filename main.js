@@ -694,6 +694,14 @@ function createCurtainExtraAt(worldTopCenter, width, maxHeight) {
   return sim;
 }
 
+function initCurtainExtraUI() {
+  const btn = document.getElementById('btnCortinaExtra');
+  if (btn) {
+    btn.className = 'ui-button';
+    btn.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
+  }
+}
+
 function spawnCurtainExtraNear(modelBox) {
   const center = modelBox.getCenter(new THREE.Vector3());
   const top = modelBox.max.y;
@@ -803,7 +811,11 @@ function initCurtainExtraUIForClone() {
         cortinaExtraCerrada = (cortinaExtraPanel.scale.y <= closeTargetInit + 1e-4);
     }
 
-	
+	const updateBtn = () => {
+		if (cortinaExtraNode) btn.textContent = `${cortinaExtraNode.visible ? 'Ocultar' : 'Mostrar'} cortina ancha trasera`;
+		else btn.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
+	};
+	updateBtn();
 
 	btn.addEventListener('click', () => {
 		if (cortinaExtraNode) {
@@ -1486,7 +1498,7 @@ if (btnPuerta) {
   btnPuerta.addEventListener("click", () => {
     if (!puertaControl || animacionActiva) return;
 
-    let destino = puertaControlAbierta ? puertaControl.rotacionCerradaY : puertaControl.rotacionAbiertaY;
+    const destino = puertaControlAbierta ? puertaControl.rotacionCerradaY : puertaControl.rotacionAbiertaY;
 
     rotarSuave(puertaControl, destino, () => {
       puertaControlAbierta = !puertaControlAbierta;
@@ -1635,6 +1647,17 @@ if (btnDebugBajar) {
 
 // Nuevo botón para cortina extra (fijo)
 const btnFixed = document.getElementById('btnCortinaExtraFixed');
+if (btnFixed) {
+  btnFixed.addEventListener('click', () => {
+    if (!cortinaExtraPanel) return;
+    const objetivo = cortinaExtraCerrada ? cortinaExtraMaxScaleY : 0.001;
+    animatePanel(cortinaExtraPanel, objetivo, 350, () => {
+      cortinaExtraCerrada = !cortinaExtraCerrada;
+      btnFixed.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
+    });
+  });
+}
+
 
 
 // Indicador visual de zoom de cámara 3D
