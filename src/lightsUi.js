@@ -88,10 +88,10 @@ function setupLightButtons(root) {
     btn.classList.add(mesh.userData.isOn ? 'light-on' : 'light-off');
     btn.title = `${mesh.name}`;
     
-    // Crear el span para el texto fijo
-    const label = document.createElement('span');
-    label.textContent = `${mesh.name}`;
-    btn.appendChild(label);
+  // Crear el span para el texto fijo
+  const label = document.createElement('span');
+  label.textContent = `Luz ${idx + 1}`;
+  btn.appendChild(label);
     
     btn.addEventListener('click', () => {
       const newState = !mesh.userData.isOn;
