@@ -694,14 +694,6 @@ function createCurtainExtraAt(worldTopCenter, width, maxHeight) {
   return sim;
 }
 
-function initCurtainExtraUI() {
-  const btn = document.getElementById('btnCortinaExtra');
-  if (btn) {
-    btn.className = 'ui-button';
-    btn.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
-  }
-}
-
 function spawnCurtainExtraNear(modelBox) {
   const center = modelBox.getCenter(new THREE.Vector3());
   const top = modelBox.max.y;
@@ -809,13 +801,10 @@ function initCurtainExtraUIForClone() {
         const closeTargetInit = Math.max(0.001, CURTAIN_EXTRA_FIXED_H);
         // Considerar cerrada si está en o por debajo del cierre
         cortinaExtraCerrada = (cortinaExtraPanel.scale.y <= closeTargetInit + 1e-4);
+        updateCurtainExtraBtnVisual();
     }
 
-	const updateBtn = () => {
-		if (cortinaExtraNode) btn.textContent = `${cortinaExtraNode.visible ? 'Ocultar' : 'Mostrar'} cortina ancha trasera`;
-		else btn.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
-	};
-	updateBtn();
+	
 
 	btn.addEventListener('click', () => {
 		if (cortinaExtraNode) {
@@ -831,11 +820,10 @@ function initCurtainExtraUIForClone() {
             : (cortinaExtraMaxScaleY > 0 ? cortinaExtraMaxScaleY : (cortinaExtraPanel.scale?.y || CURTAIN_EXTRA_FIXED_H));
         const closeTarget = Math.max(0.001, CURTAIN_EXTRA_FIXED_H);
     const objetivo = cortinaExtraCerrada ? openTarget : closeTarget;
-		animatePanel(cortinaExtraPanel, objetivo, 350, () => {
-			cortinaExtraCerrada = !cortinaExtraCerrada;
-			updateBtn();
-			updateCurtainExtraSizeLabel();
-		});
+    animatePanel(cortinaExtraPanel, objetivo, 350, () => {
+      cortinaExtraCerrada = !cortinaExtraCerrada;
+      updateCurtainExtraBtnVisual();
+    });
 	});
 
     // Bloquear en valores solicitados por el usuario (solo coord. y ancho)
@@ -859,6 +847,19 @@ function initCurtainExtraUIForClone() {
     }
 
 	updateCurtainExtraSizeLabel();
+}
+// ...existing code...
+
+function updateCurtainExtraBtnVisual() {
+  const btn = document.getElementById('btnCortinaExtra');
+  if (!btn) return;
+  if (cortinaExtraCerrada) {
+    btn.classList.remove('curtains');
+    btn.classList.add('curtains-closed');
+  } else {
+    btn.classList.remove('curtains-closed');
+    btn.classList.add('curtains');
+  }
 }
 
 // Forzar posición inicial exacta de la cortina extra
@@ -1175,7 +1176,7 @@ loader.load('assets/modelo_final.glb', (gltf) => {
 
     // Actualizar texto del botón principal
     const btnPuertaEl = document.getElementById("btnPuerta");
-    if (btnPuertaEl) setButtonLabel(btnPuertaEl, `${puertaControl.name}`);
+    if (btnPuertaEl) setButtonLabel(btnPuertaEl, "Puerta 1");
   }
 
   // Configurar puertas interiores
@@ -1498,7 +1499,7 @@ if (btnPuerta) {
   btnPuerta.addEventListener("click", () => {
     if (!puertaControl || animacionActiva) return;
 
-    const destino = puertaControlAbierta ? puertaControl.rotacionCerradaY : puertaControl.rotacionAbiertaY;
+    let destino = puertaControlAbierta ? puertaControl.rotacionCerradaY : puertaControl.rotacionAbiertaY;
 
     rotarSuave(puertaControl, destino, () => {
       puertaControlAbierta = !puertaControlAbierta;
@@ -1647,17 +1648,6 @@ if (btnDebugBajar) {
 
 // Nuevo botón para cortina extra (fijo)
 const btnFixed = document.getElementById('btnCortinaExtraFixed');
-if (btnFixed) {
-  btnFixed.addEventListener('click', () => {
-    if (!cortinaExtraPanel) return;
-    const objetivo = cortinaExtraCerrada ? cortinaExtraMaxScaleY : 0.001;
-    animatePanel(cortinaExtraPanel, objetivo, 350, () => {
-      cortinaExtraCerrada = !cortinaExtraCerrada;
-      btnFixed.textContent = `${cortinaExtraCerrada ? 'Abrir' : 'Cerrar'} cortina cocina`;
-    });
-  });
-}
-
 
 
 // Indicador visual de zoom de cámara 3D
