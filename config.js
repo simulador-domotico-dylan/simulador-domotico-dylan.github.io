@@ -30,17 +30,17 @@ export const curtainConfig = {
 
 export const buttonConfig = {
   portonDelantero: {
-    texto: "Portón delantero",
+    texto: "Portón 1",
     icono1: "garage-open",
     icono2: "garage-closed",
   },
   portonTrasero: {
-    texto: "Portón trasero",
+    texto: "Portón 2",
     icono1: "garage-open",
     icono2: "garage-closed",
   },
   puertaPrincipal: {
-    texto: "Puerta principal",
+    texto: "Puerta 1",
     icono1: "door-open",
     icono2: "door-closed",
   },
@@ -65,9 +65,9 @@ export const buttonConfig = {
     icono2: "curtains-closed",
   },
   cortinaExtra: {
-    texto: "Cortina cocina",
-    icono1: "curtains",
-    icono2: "curtains-closed",
+    texto: "Cortina 3",
+    icono1: "curtains-closed",
+    icono2: "curtains",
   },
   luzIzquierda: {
     texto: "Luz Izquierda",
