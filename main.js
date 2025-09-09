@@ -102,6 +102,15 @@ let animacionActiva = false;
 let portonDelanteroAbierto = false;
 let portonTraseroAbierto = false;
 
+// Estado para la funcionalidad de arrastre
+const dragState = {
+  active: false,
+  target: null,
+  pointerId: null,
+  mode: 'xy', // 'xy' o 'z'
+  offset: new THREE.Vector3()
+};
+
 // Referencias a objetos de control
 let portonDelanteroRef = null;
 let puertaControl = null; // Objeto que controlará el botón principal
@@ -1693,6 +1702,34 @@ window.addEventListener('DOMContentLoaded', () => {
   camera.position.copy(target).add(dir.multiplyScalar(2.44));
   camera.updateProjectionMatrix();
 });
+// Camera rotation with arrow keys
+document.addEventListener('keydown', (event) => {
+  const rotateAngle = 0.05; // Rotation angle in radians
+
+  // Obtener el target de los controles, o el centro de la escena si no está disponible
+  const target = controls.target || new THREE.Vector3(0, 0, 0);
+  
+  // Vector desde el target a la cámara
+  const offset = new THREE.Vector3().subVectors(camera.position, target);
+
+  switch (event.key) {
+    case 'ArrowLeft':
+      // Rotar el offset alrededor del eje Y
+      offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotateAngle);
+      break;
+    case 'ArrowRight':
+      // Rotar el offset alrededor del eje Y en la otra dirección
+      offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -rotateAngle);
+      break;
+    default:
+      return; // Salir si no es una flecha de dirección
+  }
+
+  // Calcular la nueva posición de la cámara y apuntar al target
+  camera.position.copy(target).add(offset);
+  camera.lookAt(target);
+});
+
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
