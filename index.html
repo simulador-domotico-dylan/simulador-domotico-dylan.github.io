@@ -98,7 +98,7 @@
     
     /* Iconos específicos para cada botón */
     #btnPortonDelantero::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage-open</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z" /></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z" /></svg>');
     }
     #btnPortonTrasero::before {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage-open</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z" /></svg>');
@@ -113,10 +113,10 @@
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
     }
     #btnCortinaTrasera::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
     }
-    #btnCortinaExtra::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+    #btnCortinaExtraFixed::before {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
     }
     .light-on::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd86b"><path d="M9 21h6v-1.5H9V21zm3-19C7.93 2 5 4.93 5 8c0 2.38 1.19 4.47 3 5.74V16c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.07-2.93-6-6-6z"/></svg>'); }
     .light-off::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M9 21h6v-1.5H9V21zm3-19C7.93 2 5 4.93 5 8c0 2.38 1.19 4.47 3 5.74V16c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.07-2.93-6-6-6z"/></svg>'); }
@@ -213,19 +213,6 @@
     #btnPuerta.door-closed::before, #btnPuertaBaño.door-closed::before {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door</title><path d="M8,3C6.89,3 6,3.89 6,5V21H18V5C18,3.89 17.11,3 16,3H8M8,5H16V19H8V5M13,11V13H15V11H13Z" /></svg>');
     }
-
-    /* Estilos para los íconos dinámicos de las cortinas */
-    #btnCortinaDelantera.curtains::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
-    }
-    #btnCortinaTrasera.curtains::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
-    }
-    #btnCortinaExtra.curtains::before, #btnCortinaExtra.curtains-closed::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
-    }
-
-
   </style>
 </head>
 <body>
@@ -234,14 +221,15 @@
   <div id="controls">
     <div class="controls-scroll">
   <img id="arrow-left" src="assets/flecha.png" style="position:absolute;left:-22px;top:50%;transform:translateY(-50%) rotate(180deg);width:20px;height:20px;z-index:20;cursor:pointer;display:none;filter:drop-shadow(0 2px 6px #000);" />
-  <button id="btnPortonDelantero" class="ui-button"><span>Portón 1</span></button>
-  <button id="btnPortonTrasero" class="ui-button"><span>Portón 2</span></button>
+  <button id="btnPortonDelantero" class="ui-button"><span>Portón delantero</span></button>
+  <button id="btnPortonTrasero" class="ui-button"><span>Portón trasero</span></button>
   <button id="btnPuerta" class="ui-button"><span>Puerta</span></button>
   <button id="btnPuertaCuarto" class="ui-button"><span>Puerta cuarto</span></button>
   <button id="btnPuertaBaño" class="ui-button"><span>Puerta baño</span></button>
   <button id="btnCortinaDelantera" class="ui-button"><span>Cortina delantera</span></button>
   <button id="btnCortinaTrasera" class="ui-button"><span>Cortina trasera</span></button>
-  <button id="btnCortinaExtra" class="ui-button"><span>Cortina 3</span></button>
+  <button id="btnCortinaExtra" class="ui-button" style="display: none;"><span>Cortina cocina</span></button>
+  <button id="btnCortinaExtraFixed" class="ui-button"><span>Cortina cocina</span></button>
       <div id="lights-controls"></div>
   <img id="arrow-right" src="assets/flecha.png" style="position:absolute;right:-22px;top:50%;transform:translateY(-50%);width:20px;height:20px;z-index:20;cursor:pointer;display:none;filter:drop-shadow(0 2px 6px #000);" />
   <script>
@@ -326,4 +314,31 @@
   })();
   </script>
 </body>
+  <script>
+    // Añadir el elemento zoom-indicator al final del body si no existe
+    if (!document.getElementById('zoom-indicator')) {
+      const zoomIndicator = document.createElement('div');
+      zoomIndicator.id = 'zoom-indicator';
+      zoomIndicator.style.position = 'fixed';
+      zoomIndicator.style.bottom = '10px';
+      zoomIndicator.style.right = '10px';
+      zoomIndicator.style.fontSize = '12px';
+      zoomIndicator.style.color = '#888';
+      zoomIndicator.style.zIndex = '9999';
+      document.body.appendChild(zoomIndicator);
+    }
+    
+    function updateZoomIndicator() {
+      const zoom = Math.round(window.devicePixelRatio * 100);
+      const zoomIndicator = document.getElementById('zoom-indicator');
+      if (zoomIndicator) {
+        zoomIndicator.textContent = `Zoom: ${zoom}%`;
+      }
+    }
+    window.addEventListener('resize', updateZoomIndicator);
+    document.addEventListener('visibilitychange', updateZoomIndicator);
+    document.addEventListener('DOMContentLoaded', updateZoomIndicator);
+    setInterval(updateZoomIndicator, 300);
+    updateZoomIndicator();
+  </script>
 </html>
