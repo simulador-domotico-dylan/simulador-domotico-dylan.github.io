@@ -74,12 +74,9 @@ function setupLightButtons(root) {
 
   lucesObjetos = lucesObjetos.slice(0, 4);
 
-  const container = document.getElementById('lights-controls');
-  if (!container) return;
-  container.innerHTML = "";
-
   // Insertar directamente en el scroller superior para mantener el mismo layout
-  const buttonsContainer = document.querySelector('#controls .controls-scroll') || container;
+  const buttonsContainer = document.querySelector('#controls .controls-scroll');
+  if (!buttonsContainer) return;
 
   lucesObjetos.forEach((mesh, idx) => {
     const btn = document.createElement('button');

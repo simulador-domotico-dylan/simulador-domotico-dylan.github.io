@@ -1,4 +1,9 @@
 import { THREE, scene, camera, renderer, controls } from './src/core.js';
+
+// Exponer variables de Three.js globalmente para el zoom slider
+window.THREE = THREE;
+window.camera = camera;
+window.controls = controls;
 import { createLights, updateBrightness, ambientLight, mainLight } from './src/lighting.js';
 import { setupLightButtons } from './src/lightsUi.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.150.1/examples/jsm/loaders/GLTFLoader.js';
