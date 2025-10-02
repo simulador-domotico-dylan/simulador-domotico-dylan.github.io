@@ -1,4 +1,5 @@
 import { THREE } from './core.js';
+import { showDeviceInfo } from './infoCards.js';
 
 const lightKeywords = ["luz", "light", "lampara", "lámpara", "farol", "poste", "lamp", "foco"];
 let lucesObjetos = [];
@@ -97,6 +98,10 @@ function setupLightButtons(root) {
       // Solo cambiar la clase del botón para actualizar el icono
       btn.classList.remove('light-on', 'light-off');
       btn.classList.add(mesh.userData.isOn ? 'light-on' : 'light-off');
+      
+      // Mostrar cartel informativo
+      const action = mesh.userData.isOn ? 'encendida' : 'apagada';
+      showDeviceInfo(`Luz ${idx + 1}`, `Luz ${action}`, mesh.position, mesh);
     });
     
     buttonsContainer.appendChild(btn);

@@ -1,4 +1,11 @@
 import { THREE, scene, camera, renderer, controls } from './src/core.js';
+import { showDeviceInfo } from './src/infoCards.js';
+// Exponer referencias para sincronizar con barra de zoom en index.html
+if (typeof window !== 'undefined') {
+  window.THREE = THREE;
+  window.threeCamera = camera;
+  window.threeControls = controls;
+}
 
 // Exponer variables de Three.js globalmente para el zoom slider
 window.THREE = THREE;
@@ -1520,6 +1527,10 @@ if (btnPuerta) {
       // Actualizar solo el icono
       btnPuerta.classList.remove(config.icono1, config.icono2);
       btnPuerta.classList.add(puertaControlAbierta ? config.icono2 : config.icono1);
+      
+      // Mostrar cartel informativo
+      const action = puertaControlAbierta ? 'abierta' : 'cerrada';
+      showDeviceInfo('Puerta Principal', `Puerta ${action}`, puertaControl.position, puertaControl);
     });
   });
 }
@@ -1543,6 +1554,10 @@ if (btnPortonDelantero) {
       // Mantener el texto fijo
       btnPortonDelantero.classList.remove(config.icono1, config.icono2);
       btnPortonDelantero.classList.add(isAbrir ? config.icono1 : config.icono2);
+      
+      // Mostrar cartel informativo
+      const action = portonDelanteroAbierto ? 'abierto' : 'cerrado';
+      showDeviceInfo('Portón Delantero', `Portón ${action}`, portonDelanteroPivot.position, portonDelanteroPivot);
     });
   });
 }
@@ -1565,6 +1580,10 @@ if (btnPortonTrasero) {
       // Solo actualizar el icono
       btnPortonTrasero.classList.remove(config.icono1, config.icono2);
       btnPortonTrasero.classList.add(portonTraseroAbierto ? config.icono2 : config.icono1);
+      
+      // Mostrar cartel informativo
+      const action = portonTraseroAbierto ? 'abierto' : 'cerrado';
+      showDeviceInfo('Portón Trasero', `Portón ${action}`, portonTraseroPivot.position, portonTraseroPivot);
     });
   });
 }
@@ -1587,6 +1606,10 @@ if (btnCortinaDelantera) {
     animatePanel(cortinaDelanteraPanel, objetivo, 350, () => {
       cortinaDelanteraCerrada = !cortinaDelanteraCerrada;
       updateIcon();
+      
+      // Mostrar cartel informativo
+      const action = cortinaDelanteraCerrada ? 'cerrada' : 'abierta';
+      showDeviceInfo('Cortina Delantera', `Cortina ${action}`, cortinaDelanteraPanel.position, cortinaDelanteraPanel);
     });
   });
 }
@@ -1610,7 +1633,11 @@ if (btnCortinaTrasera) {
       updateIcon();
       const p = cortinaTraseraPanelPivot.position;
       console.log('📌 Trasera pivot:', { x: p.x.toFixed(3), y: p.y.toFixed(3), z: p.z.toFixed(3) });
-});
+      
+      // Mostrar cartel informativo
+      const action = cortinaTraseraCerrada ? 'cerrada' : 'abierta';
+      showDeviceInfo('Cortina Trasera', `Cortina ${action}`, cortinaTraseraPanel.position, cortinaTraseraPanel);
+    });
 });
 }
 

@@ -56,13 +56,15 @@ export const buttonConfig = {
   },
   cortinaDelantera: {
     texto: "Cortina 1",
-    icono1: "curtains",
-    icono2: "curtains-closed",
+    // icono1 = estado CERRADA, icono2 = estado ABIERTA
+    icono1: "curtains-closed",
+    icono2: "curtains",
   },
   cortinaTrasera: {
     texto: "Cortina 2",
-    icono1: "curtains",
-    icono2: "curtains-closed",
+    // icono1 = estado CERRADA, icono2 = estado ABIERTA
+    icono1: "curtains-closed",
+    icono2: "curtains",
   },
   cortinaExtra: {
     texto: "Cortina 3",

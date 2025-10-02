@@ -197,22 +197,47 @@
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage-open</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12Z" /></svg>');
     }
     #btnPuerta::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door-open</title><path d="M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z" /></svg>');
+      background-image: url('assets/puerta cerrada.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #btnPuertaCuarto::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door-open</title><path d="M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z" /></svg>');
+      background-image: url('assets/puerta cerrada.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #btnCortinaDelantera::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+      background-image: url('assets/cortian_cerrada-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #btnCortinaTrasera::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+      background-image: url('assets/cortian_cerrada-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #btnCortinaExtra::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+      background-image: url('assets/cortian_cerrada-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
-    .light-on::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd86b"><path d="M9 21h6v-1.5H9V21zm3-19C7.93 2 5 4.93 5 8c0 2.38 1.19 4.47 3 5.74V16c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.07-2.93-6-6-6z"/></svg>'); }
-    .light-off::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M9 21h6v-1.5H9V21zm3-19C7.93 2 5 4.93 5 8c0 2.38 1.19 4.47 3 5.74V16c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.07-2.93-6-6-6z"/></svg>'); }
+    .light-on::before { 
+      background-image: url('assets/bombilla prendida.png'); 
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .light-off::before { 
+      background-image: url('assets/bombilla apagada.png'); 
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
     .icon-light::before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd86b"><path d="M9 21h6v-1.5H9V21zm3-19C7.93 2 5 4.93 5 8c0 2.38 1.19 4.47 3 5.74V16c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.07-2.93-6-6-6z"/></svg>'); }
 
     /* Contenedor con desplazamiento horizontal (sin barra visible) */
@@ -298,29 +323,84 @@
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>garage</title><path d="M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z" /></svg>');
     }
     
-    /* Estilos para los íconos dinámicos de las puertas */
-    #btnPuertaCuarto.door-open::before, #btnPuertaBaño.door-open::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door-open</title><path d="M12,3C10.89,3 10,3.89 10,5H3V19H2V21H22V19H21V5C21,3.89 20.11,3 19,3H12M12,5H19V19H12V5M5,11H7V13H5V11Z" /></svg>');
+    /* Estilos para los íconos dinámicos de las puertas - usar PNG de assets */
+    #btnPuerta.door-open::before,
+    #btnPuertaCuarto.door-open::before,
+    #btnPuertaBaño.door-open::before {
+      background-image: url('assets/puerta abierta.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
-    #btnPuertaCuarto.door-closed::before, #btnPuertaBaño.door-closed::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door</title><path d="M8,3C6.89,3 6,3.89 6,5V21H18V5C18,3.89 17.11,3 16,3H8M8,5H16V19H8V5M13,11V13H15V11H13Z" /></svg>');
-    }
-    #btnPuerta.door-closed::before, #btnPuertaBaño.door-closed::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>door</title><path d="M8,3C6.89,3 6,3.89 6,5V21H18V5C18,3.89 17.11,3 16,3H8M8,5H16V19H8V5M13,11V13H15V11H13Z" /></svg>');
+    #btnPuerta.door-closed::before,
+    #btnPuertaCuarto.door-closed::before,
+    #btnPuertaBaño.door-closed::before {
+      background-image: url('assets/puerta cerrada.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
     /* Estilos para los íconos dinámicos de las cortinas */
     #btnCortinaDelantera.curtains::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
+      background-image: url('assets/cortina_abierta-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #btnCortinaTrasera.curtains::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
+      background-image: url('assets/cortina_abierta-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
+    /* Inversión de iconos para Cortina 3 */
     #btnCortinaExtra.curtains::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains</title><path d="M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z" /></svg>');
+      /* Cuando está abierta, mostrar imagen de CERRADA (invertido) */
+      background-image: url('assets/cortian_cerrada-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
     #btnCortinaExtra.curtains-closed::before {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><title>curtains-closed</title><path d="M23 3H1V1H23V3M2 22H11V4H2V22M22 4H13V22H22V4Z" /></svg>');
+      /* Cuando está cerrada, mostrar imagen de ABIERTA (invertido) */
+      background-image: url('assets/cortina_abierta-removebg-preview.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* Estilos para carteles informativos */
+    .info-card {
+      animation: cardAppear 0.3s ease-out;
+    }
+    
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .connection-line {
+      animation: lineDraw 0.5s ease-out;
+      border-top: 4px dashed rgba(100, 150, 255, 0.8);
+      background: transparent;
+    }
+    
+    @keyframes lineDraw {
+      from {
+        width: 0;
+        opacity: 0;
+      }
+      to {
+        width: var(--line-width);
+        opacity: 1;
+      }
     }
 
 
@@ -484,6 +564,12 @@
       // Actualizar posición de cámara
       threeCamera.position.copy(newPosition);
       threeCamera.updateProjectionMatrix();
+      // Forzar límites también en controls
+      if (threeControls) {
+        threeControls.minDistance = minDistance;
+        threeControls.maxDistance = maxDistance;
+        threeControls.update();
+      }
     }
     
     // Función para obtener las referencias de Three.js
@@ -582,6 +668,21 @@
           threeControls = possibleControls;
           THREE = possibleTHREE;
           console.log('Referencias de Three.js encontradas para el zoom');
+          // Configurar límites de zoom en controls y sincronizar
+          threeControls.minDistance = minDistance;
+          threeControls.maxDistance = maxDistance;
+          // Sincronizar el thumb cuando cambie la distancia por rueda/gesto
+          const syncFromControls = () => {
+            const target = threeControls.target || new THREE.Vector3(0, 0, 0);
+            const currentDistance = new THREE.Vector3().subVectors(threeCamera.position, target).length();
+            const clamped = Math.max(minDistance, Math.min(maxDistance, currentDistance));
+            const t = 1 - (clamped - minDistance) / (maxDistance - minDistance);
+            thumbPosition = Math.max(0, Math.min(1, t));
+            updateThumbPosition();
+          };
+          threeControls.addEventListener('change', syncFromControls);
+          // Sincronizar una vez al inicio con la distancia actual
+          syncFromControls();
           return true;
         }
       }
