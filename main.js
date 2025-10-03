@@ -960,6 +960,18 @@ loader.load('assets/modelo_final.glb', (gltf) => {
   camera.lookAt(center);
   scene.add(modelo);
 
+  // Guardar posición inicial del modelo y del target de la cámara
+  if (!window.__houseInitialPos) {
+    window.__houseInitialPos = modelo.position.clone();
+  } else {
+    window.__houseInitialPos.copy(modelo.position);
+  }
+  if (!window.__controlsInitialTarget) {
+    window.__controlsInitialTarget = (controls && controls.target) ? controls.target.clone() : new THREE.Vector3();
+  } else if (controls && controls.target) {
+    window.__controlsInitialTarget.copy(controls.target);
+  }
+
   // Centrar el target de la luz al modelo y ajustar cámara de sombras al tamaño del modelo para más detalle
   const modelBox = new THREE.Box3().setFromObject(modelo);
   const modelCenter = modelBox.getCenter(new THREE.Vector3());
@@ -1733,34 +1745,14 @@ window.addEventListener('DOMContentLoaded', () => {
   // Nueva posición a distancia 2.44 del target
   camera.position.copy(target).add(dir.multiplyScalar(2.44));
   camera.updateProjectionMatrix();
-});
-// Camera rotation with arrow keys
-document.addEventListener('keydown', (event) => {
-  const rotateAngle = 0.05; // Rotation angle in radians
-
-  // Obtener el target de los controles, o el centro de la escena si no está disponible
-  const target = controls.target || new THREE.Vector3(0, 0, 0);
-  
-  // Vector desde el target a la cámara
-  const offset = new THREE.Vector3().subVectors(camera.position, target);
-
-  switch (event.key) {
-    case 'ArrowLeft':
-      // Rotar el offset alrededor del eje Y
-      offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), rotateAngle);
-      break;
-    case 'ArrowRight':
-      // Rotar el offset alrededor del eje Y en la otra dirección
-      offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -rotateAngle);
-      break;
-    default:
-      return; // Salir si no es una flecha de dirección
+  // Guardar estado inicial exacto para reset (después de fijar zoom)
+  if (controls) {
+    window.__initialCameraTarget = controls.target.clone();
+    window.__initialCameraPosition = camera.position.clone();
+    window.__initialHousePosition = (typeof modelo !== 'undefined' && modelo) ? modelo.position.clone() : new THREE.Vector3();
   }
-
-  // Calcular la nueva posición de la cámara y apuntar al target
-  camera.position.copy(target).add(offset);
-  camera.lookAt(target);
 });
+// Anulado: control fino con flechas. Ahora las flechas rotan 90° (ver D-Pad).
 
 function animate() {
   requestAnimationFrame(animate);
@@ -1769,3 +1761,106 @@ function animate() {
   // Eliminar la llamada a updateZoomIndicator3D que no está definida
 }
 animate();
+
+// ===== D-Pad: mover casa y rotar cámara por caras =====
+(function setupDpad() {
+  const btnUp = document.getElementById('dpad-up');
+  const btnDown = document.getElementById('dpad-down');
+  const btnLeft = document.getElementById('dpad-left');
+  const btnRight = document.getElementById('dpad-right');
+
+  const btnCenter = document.getElementById('dpad-center');
+  if (!btnUp || !btnDown || !btnLeft || !btnRight || !btnCenter) return;
+
+  // Rotar la cámara en incrementos de 90° alrededor del target
+  function rotateCameraQuarter(direction) { // direction: +1 derecha, -1 izquierda, +2 arriba, -2 abajo
+    if (!controls) return;
+    const target = controls.target || new THREE.Vector3(0,0,0);
+    const offset = new THREE.Vector3().subVectors(camera.position, target);
+    if (direction === 1) {
+      offset.applyAxisAngle(new THREE.Vector3(0,1,0), -Math.PI/2);
+    } else if (direction === -1) {
+      offset.applyAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
+    } else if (direction === 2) {
+      // Rotar hacia arriba (alrededor del eje X del mundo): limitar para evitar invertir
+      const upAxis = new THREE.Vector3(1,0,0);
+      offset.applyAxisAngle(upAxis, -Math.PI/2);
+    } else if (direction === -2) {
+      const upAxis = new THREE.Vector3(1,0,0);
+      offset.applyAxisAngle(upAxis, Math.PI/2);
+    }
+    camera.position.copy(new THREE.Vector3().addVectors(target, offset));
+    camera.lookAt(target);
+    controls.update();
+  }
+
+  // Alternar vistas: superior/frontal con ángulos suaves y transición
+  let isTopView = false;
+  function animateCameraTo(newCamPos, target, durationMs = 320) {
+    const startPos = camera.position.clone();
+    const start = performance.now();
+    function step(t) {
+      const p = Math.min(1, (t - start) / durationMs);
+      camera.position.lerpVectors(startPos, newCamPos, p);
+      camera.lookAt(target);
+      if (p < 1) requestAnimationFrame(step); else controls.update();
+    }
+    requestAnimationFrame(step);
+  }
+  function goFrontView() {
+    if (!controls) return;
+    const target = window.__controlsInitialTarget || controls.target || new THREE.Vector3();
+    const distance = new THREE.Vector3().subVectors(camera.position, controls.target).length();
+    // Frontal ligeramente picada: un poco hacia arriba
+    const dir = new THREE.Vector3(0, 0.28, 1.0).normalize();
+    const dest = new THREE.Vector3().addVectors(target, dir.multiplyScalar(distance));
+    animateCameraTo(dest, target, 320);
+    controls.target.copy(target);
+    isTopView = false;
+  }
+  function goTopView() {
+    if (!controls) return;
+    const target = window.__controlsInitialTarget || controls.target || new THREE.Vector3();
+    const distance = new THREE.Vector3().subVectors(camera.position, controls.target).length();
+    // Superior no tan ortogonal: casi arriba con leve desplazamiento Z
+    const dir = new THREE.Vector3(0, 1.0, 0.18).normalize();
+    const dest = new THREE.Vector3().addVectors(target, dir.multiplyScalar(distance));
+    animateCameraTo(dest, target, 320);
+    controls.target.copy(target);
+    isTopView = true;
+  }
+
+  // Clicks de cruceta: rotaciones 90°
+  btnRight.addEventListener('click', () => rotateCameraQuarter(1));
+  btnLeft.addEventListener('click', () => rotateCameraQuarter(-1));
+  btnUp.addEventListener('click', () => { isTopView ? goFrontView() : goTopView(); });
+  btnDown.addEventListener('click', () => { isTopView ? goFrontView() : goTopView(); });
+
+  // Reset total a la vista inicial (posición y zoom originales)
+  function resetToInitial() {
+    const initCamPos = window.__initialCameraPosition;
+    const initTarget = window.__initialCameraTarget;
+    const initHouse = window.__initialHousePosition;
+    if (initHouse && modelo) modelo.position.copy(initHouse);
+    if (initTarget && initCamPos && controls) {
+      controls.target.copy(initTarget);
+      camera.position.copy(initCamPos);
+      camera.lookAt(initTarget);
+      controls.update();
+    }
+    isTopView = false;
+  }
+  btnCenter.addEventListener('click', resetToInitial);
+
+  // Teclado: flechas giran igual; espacio resetea
+  document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+      case 'ArrowRight': rotateCameraQuarter(1); break;
+      case 'ArrowLeft': rotateCameraQuarter(-1); break;
+      case 'ArrowUp': isTopView ? goFrontView() : goTopView(); break;
+      case 'ArrowDown': isTopView ? goFrontView() : goTopView(); break;
+      case ' ': resetToInitial(); break;
+      default: return;
+    }
+  });
+})();

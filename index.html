@@ -50,13 +50,53 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       z-index: 10;
-      width: 80px;
+      width: 110px;
       height: auto;
       min-height: 400px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      align-items: center; /* centrar contenido horizontalmente */
     }
+
+  /* Cruceta (D-Pad) */
+  .dpad {
+    width: 80px; /* encaja dentro del panel */
+    height: 80px;
+    margin: 14px auto 10px auto; /* centrada dentro del panel */
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 6px;
+    justify-items: center;
+    align-items: center;
+  }
+  .dpad button {
+    appearance: none;
+    background: linear-gradient(180deg, var(--btn-bg1), var(--btn-bg2));
+    color: var(--btn-text);
+    border: 1px solid var(--btn-border);
+    border-radius: 8px;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow-inner), 0 2px 10px rgba(0,0,0,.35);
+    transition: background .15s ease, transform .06s ease, box-shadow .2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    user-select: none;
+  }
+  .dpad button:hover { background: linear-gradient(180deg, var(--btn-hover), var(--btn-bg2)); }
+  .dpad button:active { transform: translateY(1px); box-shadow: var(--shadow-inner), 0 1px 6px rgba(0,0,0,.45); }
+  .dpad .center {
+    width: 28px;
+    height: 28px;
+    font-weight: bold;
+  }
+  .dpad .empty { visibility: hidden; }
 
     /* Contenedor rectangular para la barra de zoom */
     .zoom-slider-container {
@@ -462,6 +502,18 @@
         <div class="zoom-slider-track"></div>
         <div class="zoom-slider-thumb" id="zoomThumb"></div>
       </div>
+    </div>
+    <!-- Cruceta de movimiento -->
+    <div class="dpad" aria-label="Mover casa">
+      <button class="empty" tabindex="-1" aria-hidden="true"></button>
+      <button id="dpad-up" title="Vista superior">▲</button>
+      <button class="empty" tabindex="-1" aria-hidden="true"></button>
+      <button id="dpad-left" title="Girar a la izquierda">◀</button>
+      <button id="dpad-center" class="center" title="Restablecer vista">●</button>
+      <button id="dpad-right" title="Girar a la derecha">▶</button>
+      <button class="empty" tabindex="-1" aria-hidden="true"></button>
+      <button id="dpad-down" title="Vista frontal">▼</button>
+      <button class="empty" tabindex="-1" aria-hidden="true"></button>
     </div>
   </div>
 
