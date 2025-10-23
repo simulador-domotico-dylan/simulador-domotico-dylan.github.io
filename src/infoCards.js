@@ -38,12 +38,17 @@ function worldToScreen(worldPosition) {
 function createInfoCard(deviceName, deviceType, worldPosition, targetObject = null) {
   const container = createCardContainer();
   
-  // Remover cartel existente si ya existe
-  const existingCardData = activeCards.get(deviceName);
-  if (existingCardData) {
-    if (existingCardData.card) existingCardData.card.remove();
-    if (existingCardData.line) existingCardData.line.remove();
-  }
+  // SIMPLE: Solo permitir un cartel a la vez
+  // Limpiar TODOS los carteles existentes inmediatamente
+  activeCards.forEach((cardData, deviceId) => {
+    if (cardData.card && cardData.card.parentNode) {
+      cardData.card.remove();
+    }
+    if (cardData.line && cardData.line.parentNode) {
+      cardData.line.remove();
+    }
+  });
+  activeCards.clear();
   
   const card = document.createElement('div');
   card.className = 'info-card';
@@ -203,6 +208,8 @@ function startUpdateLoop() {
 
 // Mostrar cartel para dispositivo específico
 function showDeviceInfo(deviceName, deviceType, worldPosition, targetObject = null) {
+  console.log('📋 showDeviceInfo llamado:', { deviceName, deviceType, worldPosition, targetObject });
+  
   if (!worldPosition) {
     console.warn('Posición 3D no proporcionada para', deviceName);
     return;

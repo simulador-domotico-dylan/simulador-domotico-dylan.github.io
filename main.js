@@ -844,6 +844,12 @@ function initCurtainExtraUIForClone() {
     animatePanel(cortinaExtraPanel, objetivo, 350, () => {
       cortinaExtraCerrada = !cortinaExtraCerrada;
       updateCurtainExtraBtnVisual();
+      
+      // Mostrar cartel informativo
+      const action = cortinaExtraCerrada ? 'cerrada' : 'abierta';
+      // Usar la posición del pivot para mejor anclaje visual
+      const pivotPosition = cortinaExtraPivot ? cortinaExtraPivot.position : cortinaExtraPanel.position;
+      showDeviceInfo('Cortina Extra', `Cortina ${action}`, pivotPosition, cortinaExtraPivot || cortinaExtraPanel);
     });
 	});
 
@@ -1483,6 +1489,11 @@ loader.load('assets/modelo_final.glb', (gltf) => {
           // Solo actualizar el icono
           btnPuertaCuarto.classList.remove(config.icono1, config.icono2);
           btnPuertaCuarto.classList.add(puertaInterior1Abierta ? config.icono2 : config.icono1);
+          
+          // Mostrar cartel informativo
+          const action = puertaInterior1Abierta ? 'abierta' : 'cerrada';
+          console.log('🚪 Puerta Cuarto - Posición:', puertaInterior1.position);
+          showDeviceInfo('Puerta Cuarto', `Puerta ${action}`, puertaInterior1.position, puertaInterior1);
         });
       });
       console.log("✔ Event listener configurado para puerta cuarto");
@@ -1510,6 +1521,11 @@ loader.load('assets/modelo_final.glb', (gltf) => {
           // Solo actualizar el icono
           btnPuertaBaño.classList.remove(config.icono1, config.icono2);
           btnPuertaBaño.classList.add(puertaInterior2Abierta ? config.icono2 : config.icono1);
+          
+          // Mostrar cartel informativo
+          const action = puertaInterior2Abierta ? 'abierta' : 'cerrada';
+          console.log('🚪 Puerta Baño - Posición:', puertaInterior2.position);
+          showDeviceInfo('Puerta Baño', `Puerta ${action}`, puertaInterior2.position, puertaInterior2);
         });
       });
     }
@@ -1542,6 +1558,7 @@ if (btnPuerta) {
       
       // Mostrar cartel informativo
       const action = puertaControlAbierta ? 'abierta' : 'cerrada';
+      console.log('🚪 Puerta Principal - Posición:', puertaControl.position);
       showDeviceInfo('Puerta Principal', `Puerta ${action}`, puertaControl.position, puertaControl);
     });
   });
@@ -1569,6 +1586,7 @@ if (btnPortonDelantero) {
       
       // Mostrar cartel informativo
       const action = portonDelanteroAbierto ? 'abierto' : 'cerrado';
+      console.log('🚪 Portón Delantero - Posición:', portonDelanteroPivot.position);
       showDeviceInfo('Portón Delantero', `Portón ${action}`, portonDelanteroPivot.position, portonDelanteroPivot);
     });
   });
@@ -1595,6 +1613,7 @@ if (btnPortonTrasero) {
       
       // Mostrar cartel informativo
       const action = portonTraseroAbierto ? 'abierto' : 'cerrado';
+      console.log('🚪 Portón Trasero - Posición:', portonTraseroPivot.position);
       showDeviceInfo('Portón Trasero', `Portón ${action}`, portonTraseroPivot.position, portonTraseroPivot);
     });
   });
@@ -1621,7 +1640,9 @@ if (btnCortinaDelantera) {
       
       // Mostrar cartel informativo
       const action = cortinaDelanteraCerrada ? 'cerrada' : 'abierta';
-      showDeviceInfo('Cortina Delantera', `Cortina ${action}`, cortinaDelanteraPanel.position, cortinaDelanteraPanel);
+      // Usar la posición del pivot para mejor anclaje visual
+      const pivotPosition = cortinaDelanteraPanelPivot ? cortinaDelanteraPanelPivot.position : cortinaDelanteraPanel.position;
+      showDeviceInfo('Cortina Delantera', `Cortina ${action}`, pivotPosition, cortinaDelanteraPanelPivot || cortinaDelanteraPanel);
     });
   });
 }
@@ -1648,7 +1669,9 @@ if (btnCortinaTrasera) {
       
       // Mostrar cartel informativo
       const action = cortinaTraseraCerrada ? 'cerrada' : 'abierta';
-      showDeviceInfo('Cortina Trasera', `Cortina ${action}`, cortinaTraseraPanel.position, cortinaTraseraPanel);
+      // Usar la posición del pivot para mejor anclaje visual
+      const pivotPosition = cortinaTraseraPanelPivot ? cortinaTraseraPanelPivot.position : cortinaTraseraPanel.position;
+      showDeviceInfo('Cortina Trasera', `Cortina ${action}`, pivotPosition, cortinaTraseraPanelPivot || cortinaTraseraPanel);
     });
 });
 }
@@ -1701,6 +1724,7 @@ if (btnDebugBajar) {
 
 // Nuevo botón para cortina extra (fijo)
 const btnFixed = document.getElementById('btnCortinaExtraFixed');
+
 
 
 // Indicador visual de zoom de cámara 3D
